@@ -4,9 +4,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '../../context/AuthContext';
 import { registerSchema } from './authSchemas';
 import styles from './AuthPage.module.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterForm() {
-  const { register: registerUser, isLoading, error: authError } = useAuth();
+  const navigate = useNavigate();
+  const { register: registerUser, login, isLoading, error: authError } = useAuth();
   const [localError, setLocalError] = useState(null);
 
   const {
@@ -15,7 +17,7 @@ export default function RegisterForm() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(registerSchema),
-    defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
+    defaultValues: { name: '', email: '', password: '' },
   });
 
   async function onSubmit(data) {
@@ -26,6 +28,12 @@ export default function RegisterForm() {
         email: data.email,
         password: data.password,
       });
+      await login({
+        email: data.email,
+        password: data.password,
+      });
+
+      navigate('/home');
     } catch (err) {
       setLocalError(err.message);
     }
