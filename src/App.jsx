@@ -31,7 +31,7 @@ export default function App() {
           element={<PublicRoute><WelcomePage /></PublicRoute>}
         />
         <Route
-          path="/auth/:mode"
+          path="/auth/:id"
           element={<PublicRoute><AuthPage /></PublicRoute>}
         />
         {/* /home artık bir layout route: HomePage sadece Sidebar+Header+Outlet çiziyor,
