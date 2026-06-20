@@ -1,31 +1,31 @@
-/* K6 Gülistan — temel portal bileşeni */
 import { useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import Icon from '../Icon/Icon';
 import styles from './Modal.module.css';
 
-export default function Modal({ isOpen, onClose, title, children }) {
-  // Escape tuşuyla kapanmasını istedim, klavye kullanan biri için modal'dan çıkmak fare gerektirmemeli
+const Modal = ({ title, onClose, children }) => {
   useEffect(() => {
-    if (!isOpen) return;
-    const handleKey = e => { if (e.key === 'Escape') onClose(); };
+    const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
-  }, [isOpen, onClose]);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = '';
+    };
+  }, [onClose]);
 
-  if (!isOpen) return null;
-
-  return createPortal(
-    <div className={styles.overlay} onClick={onClose} role="dialog" aria-modal="true">
-      {/* stopPropagation koymazsam overlay'e tıklama mantığı modal içine de sızıp her tıklamada kapatıyordu */}
-      <div className={styles.modal} onClick={e => e.stopPropagation()}>
+  return (
+    <div className={styles.backdrop} onClick={onClose}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
         <div className={styles.header}>
-          <h3 className={styles.title}>{title}</h3>
-          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">✕</button>
+          <h2 className={styles.title}>{title}</h2>
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close modal">
+            <Icon name="close" size={18} />
+          </button>
         </div>
         <div className={styles.body}>{children}</div>
       </div>
-    </div>,
-    // index.html'de #modal-root tanımlı ama yine de yoksa diye document.body'ye düşürüyorum
-    document.getElementById('modal-root') ?? document.body
+    </div>
   );
-}
+};
+
+export default Modal;
