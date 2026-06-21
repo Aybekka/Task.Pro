@@ -100,7 +100,9 @@
   transition: opacity 0.2s;
 }
 
-.addCardBtn:hover { opacity: 0.8; }
+.addCardBtn:hover {
+  opacity: 0.8;
+}
 
 .addColBtn {
   background: var(--color-card);
@@ -111,7 +113,9 @@
   font-weight: 500;
   padding: 16px 24px;
   white-space: nowrap;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
   align-self: stretch;
   min-width: 200px;
 }
@@ -122,6 +126,12 @@
 }
 
 @media (max-width: 767px) {
-  .board { padding: 16px; gap: 12px; }
-  .column { width: 280px; min-width: 280px; }
+  .board {
+    padding: 16px;
+    gap: 12px;
+  }
+  .column {
+    width: 280px;
+    min-width: 280px;
+  }
 }
