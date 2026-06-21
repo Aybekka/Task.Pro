@@ -1,6 +1,6 @@
+import { Outlet } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import ScreensPage from '../../components/ScreensPage/ScreensPage';
 import styles from './HomePage.module.css';
 
 const HomePage = () => {
@@ -9,7 +9,7 @@ const HomePage = () => {
       <Sidebar />
       <div className={styles.main}>
         <Header />
-        <ScreensPage />
+        <Outlet />
       </div>
     </div>
   );
