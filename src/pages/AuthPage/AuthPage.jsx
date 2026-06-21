@@ -29,11 +29,11 @@ export default function AuthPage() {
         </div>
 
         <div className={styles.tabs} aria-label="Authentication mode">
+          <Link to="/auth/register" className={`${styles.tab} ${!isLogin ? styles.tabActive : ''}`}>
+            Registration
+          </Link>
           <Link to="/auth/login" className={`${styles.tab} ${isLogin ? styles.tabActive : ''}`}>
             Log In
-          </Link>
-          <Link to="/auth/register" className={`${styles.tab} ${!isLogin ? styles.tabActive : ''}`}>
-            Register
           </Link>
         </div>
 

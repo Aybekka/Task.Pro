@@ -1,20 +1,20 @@
 import * as yup from "yup";
 
-// Ortak Yup yardımcıları burada kalıyor; auth şemaları artık ilgili sayfa klasöründe.
-const nameRules = yup
+// Ortak Yup yardımcıları burada kalıyor; auth şemaları authSchemas.js'te bunları import eder.
+export const nameRules = yup
   .string()
   .trim()
   .min(2, "Name must be at least 2 characters.")
   .max(50, "Name must be at most 50 characters.")
   .required("Name is required.");
 
-const emailRules = yup
+export const emailRules = yup
   .string()
   .trim()
   .email("Enter a valid email address.")
   .required("Email is required.");
 
-const passwordRules = yup
+export const passwordRules = yup
   .string()
   .min(8, "Password must be at least 8 characters.")
   .matches(/[A-Z]/, "Must contain at least one uppercase letter.")
