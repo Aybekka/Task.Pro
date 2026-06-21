@@ -39,6 +39,7 @@
 }
 
 @media (max-width: 767px) {
-  .header { padding: 0 16px; }
+  /* Sol tarafta Sidebar'ın fixed hamburger butonu için yer açıyorum, yoksa board başlığıyla üst üste biniyor */
+  .header { padding: 0 16px 0 56px; }
   .boardTitle { font-size: 16px; }
 }
