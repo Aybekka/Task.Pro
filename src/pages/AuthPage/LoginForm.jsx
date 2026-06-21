@@ -3,23 +3,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '../../context/AuthContext';
 import { loginSchema } from './authSchemas';
+import EyeIcon from './EyeIcon';
 import styles from './AuthPage.module.css';
-
-function EyeIcon({ isVisible }) {
-  return isVisible ? (
-    <svg className={styles.visibilityIcon} viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  ) : (
-    <svg className={styles.visibilityIcon} viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M3 3l18 18" />
-      <path d="M4.5 8.5C7 5.5 9.5 4 12 4c6.5 0 10 8 10 8a20.1 20.1 0 0 1-3.8 5.2" />
-      <path d="M9.5 9.5A3 3 0 0 1 14.5 14.5" />
-      <path d="M6.3 6.3A19.4 19.4 0 0 0 2 12s3.5 6 10 6c1.4 0 2.7-.2 3.9-.5" />
-    </svg>
-  );
-}
 
 export default function LoginForm() {
   const { login, isLoading, error: authError } = useAuth();
@@ -51,12 +36,12 @@ export default function LoginForm() {
       {error && <p className={styles.error} aria-live="polite">{error}</p>}
 
       <div className={styles.field}>
-        <label className={styles.label} htmlFor="login-email">Email</label>
         <input
           id="login-email"
           {...field('email')}
           type="email"
           placeholder="Enter your email"
+          aria-label="Email"
           className={styles.input}
           autoComplete="email"
         />
@@ -64,20 +49,20 @@ export default function LoginForm() {
       </div>
 
       <div className={styles.field}>
-        <label className={styles.label} htmlFor="login-password">Password</label>
         <div className={styles.passwordField}>
           <input
             id="login-password"
             {...field('password')}
             type={isPasswordVisible ? 'text' : 'password'}
             placeholder="Confirm a password"
+            aria-label="Password"
             className={`${styles.input} ${styles.passwordInput}`}
             autoComplete="current-password"
           />
           <button
             type="button"
             className={styles.visibilityBtn}
-            onClick={() => setIsPasswordVisible(value => !value)}
+            onClick={() => setIsPasswordVisible((value) => !value)}
             aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
             aria-pressed={isPasswordVisible}
           >

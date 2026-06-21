@@ -1,7 +1,7 @@
 /* K2 Gizemnur */
 import { Link } from 'react-router-dom';
 import styles from './WelcomePage.module.css';
-import avatarImg from '../../assets/Image 1.png';
+import avatarImg from '../../assets/welcome-avatar.png';
 
 export default function WelcomePage() {
   return (
