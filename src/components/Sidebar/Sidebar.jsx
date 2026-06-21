@@ -65,9 +65,7 @@ const Sidebar = () => {
         </button>
 
         <div className={styles.logo}>
-          <svg width="32" height="32" aria-hidden="true" focusable="false">
-            <use href="/sprite.svg#icon-logo" />
-          </svg>
+          <img src="/favicon.svg" width="32" height="32" alt="" aria-hidden="true" />
           <span className={styles.logoText}>Task Pro</span>
         </div>
 
