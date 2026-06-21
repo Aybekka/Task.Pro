@@ -111,30 +111,7 @@
 }
 
 @media (max-width: 767px) {
-  .header {
-    height: 60px;
-    padding: 0 16px;
-  }
-
-  .boardTitle {
-    font-size: 16px;
-  }
-
-  .userName {
-    display: none;
-  }
-
-  .right {
-    gap: 12px;
-  }
-
-  .left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .hamburger {
-    display: flex;
-  }
+  /* Sol tarafta Sidebar'ın fixed hamburger butonu için yer açıyorum, yoksa board başlığıyla üst üste biniyor */
+  .header { padding: 0 16px 0 56px; }
+  .boardTitle { font-size: 16px; }
 }
