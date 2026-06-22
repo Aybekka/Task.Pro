@@ -13,17 +13,15 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      {" "}
       <div className={styles.left}>
-        {/* TODO: Mobile sidebar toggle */}{" "}
+        {/* TODO: Mobile sidebar toggle */}
         <button
           type="button"
           className={styles.hamburger}
           aria-label="Open menu"
         >
-          ☰{" "}
+          ☰
         </button>
-        ```
         <h2 className={styles.boardTitle}>{activeBoard?.title ?? "TaskPro"}</h2>
       </div>
       <div className={styles.right}>
