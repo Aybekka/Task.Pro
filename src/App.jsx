@@ -24,7 +24,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Navigate to={isLoggedIn ? '/home' : '/welcome'} replace />} />
         <Route path="/welcome" element={<WelcomePage />} />
-        <Route path="/auth/:id" element={<AuthPage />} />
+        <Route path="/auth/:mode" element={<AuthPage />} />
         <Route
           path="/home"
           element={
