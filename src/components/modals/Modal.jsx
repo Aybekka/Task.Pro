@@ -1,3 +1,4 @@
+/* K6 Gülistan */
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Icon from '../Icon/Icon';
@@ -26,7 +27,7 @@ const Modal = ({ title, onClose, children }) => {
         <div className={styles.body}>{children}</div>
       </div>
     </div>,
-    document.getElementById('modal-root')
+    document.getElementById('modal-root') ?? document.body
   );
 };
 
