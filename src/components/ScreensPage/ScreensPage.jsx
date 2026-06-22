@@ -1,16 +1,35 @@
-/* K5 Oğulcan */
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useBoard } from '../../context/BoardContext';
+import Column from '../Column/Column';
+import CreateCardModal from '../modals/CreateCardModal';
+import EditCardModal from '../modals/EditCardModal';
+import AddColumnModal from '../modals/AddColumnModal';
+import EditColumnModal from '../modals/EditColumnModal';
+import Icon from '../Icon/Icon';
 import styles from './ScreensPage.module.css';
 
 export default function ScreensPage() {
-  // boardId'yi App.jsx'teki nested route'tan (/home/:boardId) okuyorum;
-  // bu component artık <Outlet/> üzerinden render edildiği için useParams burada çalışıyor
   const { boardId } = useParams();
-  const { boards, activeBoard, setActiveBoardId, addColumn } = useBoard();
+  const {
+    boards,
+    activeBoard,
+    setActiveBoardId,
+    addColumn,
+    updateColumn,
+    deleteColumn,
+    addCard,
+    updateCard,
+    deleteCard,
+    moveCard,
+  } = useBoard();
 
-  // URL'de boardId varsa onu aktif yap, yoksa (sadece /home'a girildiyse) ilk board'a düş
+  const [createCardColumnId, setCreateCardColumnId] = useState(null);
+  const [editingCard, setEditingCard] = useState(null);
+  const [editingCardColumnId, setEditingCardColumnId] = useState(null);
+  const [showAddColumn, setShowAddColumn] = useState(false);
+  const [editingColumn, setEditingColumn] = useState(null);
+
   useEffect(() => {
     if (boardId) {
       setActiveBoardId(boardId);
@@ -27,47 +46,101 @@ export default function ScreensPage() {
     );
   }
 
+  const handleAddCard = (columnId) => {
+    setCreateCardColumnId(columnId);
+  };
+
+  const handleCreateCard = async (cardData) => {
+    await addCard(activeBoard.id, createCardColumnId, cardData);
+    setCreateCardColumnId(null);
+  };
+
+  const handleEditCard = (card, columnId) => {
+    setEditingCard(card);
+    setEditingCardColumnId(columnId);
+  };
+
+  const handleUpdateCard = async (cardData) => {
+    await updateCard(activeBoard.id, editingCardColumnId, editingCard.id, cardData);
+    setEditingCard(null);
+    setEditingCardColumnId(null);
+  };
+
+  const handleDeleteCard = async (columnId, cardId) => {
+    await deleteCard(activeBoard.id, columnId, cardId);
+  };
+
+  const handleMoveCard = async (moveData) => {
+    await moveCard(activeBoard.id, moveData);
+  };
+
+  const handleAddColumn = async (data) => {
+    await addColumn(activeBoard.id, data);
+  };
+
+  const handleEditColumn = (column) => {
+    setEditingColumn(column);
+  };
+
+  const handleUpdateColumn = async (columnId, data) => {
+    await updateColumn(activeBoard.id, columnId, data);
+  };
+
+  const handleDeleteColumn = (columnId) => {
+    deleteColumn(activeBoard.id, columnId);
+  };
+
   return (
     <div className={styles.board}>
       {activeBoard.columns.map(column => (
-        <div key={column.id} className={styles.column}>
-          <div className={styles.columnHeader}>
-            <h3 className={styles.columnTitle}>{column.title}</h3>
-            {/* TODO Oğulcan: edit/delete column actions */}
-          </div>
-          <div className={styles.cards}>
-            {column.cards.map(card => (
-              <div key={card.id} className={styles.card}>
-                <p className={styles.cardTitle}>{card.title}</p>
-                {card.description && (
-                  <p className={styles.cardDesc}>{card.description}</p>
-                )}
-                <div className={styles.cardMeta}>
-                  {/* Önceliği renkli bir nokta olarak gösteriyorum, CSS değişkeni priority değerine göre değişiyor */}
-                  <span
-                    className={styles.priority}
-                    style={{ background: `var(--priority-${card.priority})` }}
-                  />
-                  {card.deadline && (
-                    <span className={styles.deadline}>{card.deadline}</span>
-                  )}
-                </div>
-                {/* TODO Oğulcan: card action icons (edit, delete, move) */}
-              </div>
-            ))}
-          </div>
-          {/* TODO Oğulcan: + Add a card → CardModal */}
-          <button className={styles.addCardBtn}>+ Add a card</button>
-        </div>
+        <Column
+          key={column.id}
+          column={column}
+          columns={activeBoard.columns}
+          boardId={activeBoard.id}
+          onAddCard={handleAddCard}
+          onEditCard={(card) => handleEditCard(card, column.id)}
+          onDeleteCard={handleDeleteCard}
+          onMoveCard={handleMoveCard}
+          onEditColumn={handleEditColumn}
+          onDeleteColumn={handleDeleteColumn}
+        />
       ))}
 
-      {/* TODO Oğulcan: + Add another column → ColumnModal */}
-      <button
-        className={styles.addColBtn}
-        onClick={() => addColumn(activeBoard.id, { title: 'New Column' })}
-      >
-        + Add another column
+      <button className={styles.addColBtn} onClick={() => setShowAddColumn(true)}>
+        <Icon name="plus" size={14} />
+        Add another column
       </button>
+
+      {createCardColumnId && (
+        <CreateCardModal
+          onClose={() => setCreateCardColumnId(null)}
+          onSubmit={handleCreateCard}
+        />
+      )}
+
+      {editingCard && (
+        <EditCardModal
+          card={editingCard}
+          onClose={() => { setEditingCard(null); setEditingCardColumnId(null); }}
+          onSubmit={handleUpdateCard}
+        />
+      )}
+
+      {showAddColumn && (
+        <AddColumnModal
+          onClose={() => setShowAddColumn(false)}
+          onSubmit={handleAddColumn}
+        />
+      )}
+
+      {editingColumn && (
+        <EditColumnModal
+          column={editingColumn}
+          onClose={() => setEditingColumn(null)}
+          onSubmit={handleUpdateColumn}
+        />
+      )}
     </div>
   );
 }

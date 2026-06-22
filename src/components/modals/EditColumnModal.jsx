@@ -1,0 +1,55 @@
+import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Icon from '../Icon/Icon';
+import { columnSchema } from '../../utils/validationSchemas';
+import styles from './ColumnModal.module.css';
+
+export default function EditColumnModal({ column, onClose, onSubmit }) {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(columnSchema),
+    defaultValues: { title: column.title || '' },
+  });
+
+  useEffect(() => {
+    const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [onClose]);
+
+  const onValid = (data) => {
+    onSubmit(column.id, data);
+    onClose();
+  };
+
+  return createPortal(
+    <div className={styles.backdrop} onClick={onClose}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <h2 className={styles.title}>Edit column</h2>
+        <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+          <Icon name="close" size={18} />
+        </button>
+
+        <form className={styles.form} onSubmit={handleSubmit(onValid)}>
+          <div>
+            <input
+              className={styles.input}
+              type="text"
+              placeholder="Title"
+              {...register('title')}
+              autoFocus
+            />
+            {errors.title && <span className={styles.error}>{errors.title.message}</span>}
+          </div>
+
+          <button type="submit" className={styles.submitBtn}>
+            <span className={styles.submitPlus}>+</span>
+            Edit
+          </button>
+        </form>
+      </div>
+    </div>,
+    document.getElementById('modal-root')
+  );
+}
