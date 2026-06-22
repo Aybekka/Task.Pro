@@ -7,18 +7,8 @@ import EditBoardModal from '../modals/EditBoardModal';
 import NeedHelpModal from '../modals/NeedHelpModal';
 import Modal from '../modals/Modal';
 import Icon from '../Icon/Icon';
+import { BOARD_ICON_EMOJIS } from '../../constants/boardIcons';
 import styles from './Sidebar.module.css';
-
-const BOARD_ICONS = {
-  'icon-project': '🗂️',
-  'icon-star': '⭐',
-  'icon-loading': '🔄',
-  'icon-puzzle': '🧩',
-  'icon-container': '📦',
-  'icon-lightning': '⚡',
-  'icon-colors': '🎨',
-  'icon-hexagon': '⬡',
-};
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -90,7 +80,7 @@ const Sidebar = () => {
               onClick={() => { navigate(`/home/${board.id}`); setMobileOpen(false); }}
             >
               <span className={styles.boardIcon}>
-                {BOARD_ICONS[board.icon] || '🗂️'}
+                {BOARD_ICON_EMOJIS[board.icon] || '🗂️'}
               </span>
               <span className={styles.boardTitle}>{board.title}</span>
               <div className={styles.boardActions}>

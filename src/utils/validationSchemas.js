@@ -55,9 +55,10 @@ export const editProfileSchema = yup.object({
 });
 
 export const boardSchema = yup.object({
-  title:      yup.string().trim().min(1).max(100).required('Board name is required.'),
+  title:      yup.string().trim().required('Board name is required.').max(100),
   icon:       yup.string().required('Please select an icon.'),
-  background: yup.string().required('Please select a background.'),
+  // boş string "arka plan yok" seçeneğini temsil ediyor, bu yüzden required() koymadım
+  background: yup.string(),
 });
 
 export const columnSchema = yup.object({
