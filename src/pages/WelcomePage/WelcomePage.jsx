@@ -6,7 +6,6 @@ import avatarImg from '../../assets/welcome-avatar.png';
 export default function WelcomePage() {
   return (
     <div className={styles.page}>
-
       <div className={styles.card}>
         <img src={avatarImg} alt="User Avatar" className={styles.avatar} />
         
