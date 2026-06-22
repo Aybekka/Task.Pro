@@ -1,11 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import Icon from '../Icon/Icon';
+import { columnSchema } from '../../utils/validationSchemas';
 import styles from './ColumnModal.module.css';
 
 export default function EditColumnModal({ column, onClose, onSubmit }) {
-  const [title, setTitle] = useState(column.title || '');
-  const [error, setError] = useState('');
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(columnSchema),
+    defaultValues: { title: column.title || '' },
+  });
 
   useEffect(() => {
     const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -13,13 +18,8 @@ export default function EditColumnModal({ column, onClose, onSubmit }) {
     return () => document.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!title.trim()) {
-      setError('Title is required');
-      return;
-    }
-    onSubmit(column.id, { title: title.trim() });
+  const onValid = (data) => {
+    onSubmit(column.id, data);
     onClose();
   };
 
@@ -31,16 +31,17 @@ export default function EditColumnModal({ column, onClose, onSubmit }) {
           <Icon name="close" size={18} />
         </button>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <input
-            className={styles.input}
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => { setTitle(e.target.value); setError(''); }}
-            autoFocus
-          />
-          {error && <span className={styles.error}>{error}</span>}
+        <form className={styles.form} onSubmit={handleSubmit(onValid)}>
+          <div>
+            <input
+              className={styles.input}
+              type="text"
+              placeholder="Title"
+              {...register('title')}
+              autoFocus
+            />
+            {errors.title && <span className={styles.error}>{errors.title.message}</span>}
+          </div>
 
           <button type="submit" className={styles.submitBtn}>
             <span className={styles.submitPlus}>+</span>

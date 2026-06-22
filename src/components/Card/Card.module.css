@@ -90,4 +90,30 @@
   .card {
     padding: 12px;
   }
+
+  .title {
+    font-size: 13px;
+  }
+}
+
+/* 768px — tablet */
+@media (min-width: 768px) {
+  .card {
+    padding: 14px;
+  }
+}
+
+/* 1440px — desktop */
+@media (min-width: 1440px) {
+  .card {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 15px;
+  }
+
+  .description {
+    font-size: 13px;
+  }
 }

@@ -74,7 +74,29 @@
 /* 375px — mobile */
 @media (max-width: 767px) {
   .column {
-    width: 280px;
-    min-width: 280px;
+    width: 260px;
+    min-width: 260px;
+    padding: 12px;
+    max-height: calc(100vh - 100px);
+  }
+
+  .title {
+    font-size: 13px;
+  }
+}
+
+/* 768px — tablet */
+@media (min-width: 768px) {
+  .column {
+    width: 300px;
+    min-width: 300px;
+  }
+}
+
+/* 1440px — desktop */
+@media (min-width: 1440px) {
+  .column {
+    width: 334px;
+    min-width: 334px;
   }
 }

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Card from '../Card/Card';
 import Icon from '../Icon/Icon';
 import styles from './Column.module.css';
@@ -14,8 +13,6 @@ export default function Column({
   onEditColumn,
   onDeleteColumn,
 }) {
-  const [showActions, setShowActions] = useState(false);
-
   return (
     <div className={styles.column}>
       <div className={styles.header}>

@@ -50,3 +50,23 @@
   color: var(--color-text-muted);
   padding: 8px 12px;
 }
+
+/* 375px — mobile */
+@media (max-width: 767px) {
+  .popover {
+    min-width: 130px;
+    padding: 10px;
+  }
+
+  .option {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+/* 1440px — desktop */
+@media (min-width: 1440px) {
+  .popover {
+    min-width: 180px;
+  }
+}
