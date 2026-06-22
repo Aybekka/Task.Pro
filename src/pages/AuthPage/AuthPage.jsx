@@ -8,13 +8,13 @@ import styles from './AuthPage.module.css';
 const AUTH_MODES = new Set(['login', 'register']);
 
 export default function AuthPage() {
-  const { id } = useParams();
+  const { mode } = useParams();
 
-  if (!AUTH_MODES.has(id)) {
+  if (!AUTH_MODES.has(mode)) {
     return <Navigate to="/auth/login" replace />;
   }
 
-  const isLogin = id === 'login';
+  const isLogin = mode === 'login';
 
   return (
     <div className={styles.page}>

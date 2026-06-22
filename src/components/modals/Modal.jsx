@@ -1,4 +1,6 @@
+/* K6 Gülistan */
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Icon from '../Icon/Icon';
 import styles from './Modal.module.css';
 
@@ -13,7 +15,7 @@ const Modal = ({ title, onClose, children }) => {
     };
   }, [onClose]);
 
-  return (
+  return createPortal(
     <div className={styles.backdrop} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
         <div className={styles.header}>
@@ -24,7 +26,8 @@ const Modal = ({ title, onClose, children }) => {
         </div>
         <div className={styles.body}>{children}</div>
       </div>
-    </div>
+    </div>,
+    document.getElementById('modal-root') ?? document.body
   );
 };
 
