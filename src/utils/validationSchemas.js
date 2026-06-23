@@ -38,6 +38,17 @@ export const editProfileSchema = yup.object({
         return val.length >= 8 && /[A-Z]/.test(val) && /[0-9]/.test(val);
       },
     ),
+  // Şifre boş bırakılmışsa onay alanının da boş olmasına izin veriyorum;
+  // bir şifre girildiyse onay alanı aynı değeri içermek zorunda
+  confirmPassword: yup
+    .string()
+    .nullable()
+    .transform((v) => (v === "" ? null : v))
+    .test("passwords-match", "Passwords must match.", function (value) {
+      const { password } = this.parent;
+      if (!password) return true;
+      return value === password;
+    }),
 });
 
 export const boardSchema = yup.object({
