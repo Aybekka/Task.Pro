@@ -9,7 +9,7 @@ import styles from './FormModal.module.css';
 const EditBoardModal = ({ board, onClose }) => {
     const { updateBoard } = useBoard();
 
-    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
+    const { register, handleSubmit, watch, formState: { errors } } = useForm({
         resolver: yupResolver(boardSchema),
         defaultValues: { title: board.title, icon: board.icon, background: board.background },
     });
@@ -32,20 +32,32 @@ const EditBoardModal = ({ board, onClose }) => {
 
                 <div className={styles.section}>
                     <p className={styles.sectionLabel}>Icons</p>
-                    <div className={styles.iconGrid}>
+                    <div className={styles.iconGrid} role="radiogroup" aria-label="Board icon">
                         {BOARD_ICONS.map((icon) => (
-                            <button key={icon} type="button" className={`${styles.iconBtn} ${selectedIcon === icon ? styles.selected : ''}`} onClick={() => setValue('icon', icon)}>
+                            <label key={icon} className={`${styles.iconBtn} ${selectedIcon === icon ? styles.selected : ''}`}>
+                                <input
+                                    type="radio"
+                                    value={icon}
+                                    className={styles.srOnly}
+                                    {...register('icon')}
+                                />
                                 {BOARD_ICON_EMOJIS[icon]}
-                            </button>
+                            </label>
                         ))}
                     </div>
                 </div>
 
                 <div className={styles.section}>
                     <p className={styles.sectionLabel}>Background</p>
-                    <div className={styles.bgGrid}>
+                    <div className={styles.bgGrid} role="radiogroup" aria-label="Board background">
                         {BOARD_BACKGROUNDS.map((bg, i) => (
-                            <button key={i} type="button" className={`${styles.bgBtn} ${selectedBg === bg ? styles.selected : ''}`} onClick={() => setValue('background', bg)}>
+                            <label key={i} className={`${styles.bgBtn} ${selectedBg === bg ? styles.selected : ''}`}>
+                                <input
+                                    type="radio"
+                                    value={bg}
+                                    className={styles.srOnly}
+                                    {...register('background')}
+                                />
                                 {bg ? (
                                     <img
                                         src={bg}
@@ -57,7 +69,7 @@ const EditBoardModal = ({ board, onClose }) => {
                                 ) : (
                                     <span className={styles.noBg}>∅</span>
                                 )}
-                            </button>
+                            </label>
                         ))}
                     </div>
                 </div>
