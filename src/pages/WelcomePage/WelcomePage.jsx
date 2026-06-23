@@ -2,12 +2,18 @@
 import { Link } from 'react-router-dom';
 import styles from './WelcomePage.module.css';
 import avatarImg from '../../assets/welcome-avatar.png';
+import avatarImg2x from '../../assets/welcome-avatar@2x.png';
 
 export default function WelcomePage() {
   return (
-    <div className={styles.page}>
+    <main className={styles.page}>
       <div className={styles.card}>
-        <img src={avatarImg} alt="User Avatar" className={styles.avatar} />
+        <img
+          src={avatarImg}
+          srcSet={`${avatarImg} 1x, ${avatarImg2x} 2x`}
+          alt="User Avatar"
+          className={styles.avatar}
+        />
         
         <div className={styles.logoWrapper}>
           <div className={styles.logoIcon}>
@@ -32,6 +38,6 @@ export default function WelcomePage() {
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
