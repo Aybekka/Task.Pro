@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useBoard } from '../../context/BoardContext';
-import Column from '../Column/Column';
+import HeaderDashboard from '../HeaderDashboard/HeaderDashboard';
+import MainDashboard from '../MainDashboard/MainDashboard';
 import CreateCardModal from '../modals/CreateCardModal';
 import EditCardModal from '../modals/EditCardModal';
 import AddColumnModal from '../modals/AddColumnModal';
 import EditColumnModal from '../modals/EditColumnModal';
-import Icon from '../Icon/Icon';
+import FiltersModal from '../modals/FiltersModal';
 import styles from './ScreensPage.module.css';
 
 export default function ScreensPage() {
@@ -29,6 +30,8 @@ export default function ScreensPage() {
   const [editingCardColumnId, setEditingCardColumnId] = useState(null);
   const [showAddColumn, setShowAddColumn] = useState(false);
   const [editingColumn, setEditingColumn] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [priorityFilter, setPriorityFilter] = useState(null);
 
   useEffect(() => {
     if (boardId) {
@@ -91,26 +94,20 @@ export default function ScreensPage() {
   };
 
   return (
-    <div className={styles.board}>
-      {activeBoard.columns.map(column => (
-        <Column
-          key={column.id}
-          column={column}
-          columns={activeBoard.columns}
-          boardId={activeBoard.id}
-          onAddCard={handleAddCard}
-          onEditCard={(card) => handleEditCard(card, column.id)}
-          onDeleteCard={handleDeleteCard}
-          onMoveCard={handleMoveCard}
-          onEditColumn={handleEditColumn}
-          onDeleteColumn={handleDeleteColumn}
-        />
-      ))}
+    <div className={styles.page}>
+      <HeaderDashboard board={activeBoard} onOpenFilters={() => setShowFilters(true)} />
 
-      <button className={styles.addColBtn} onClick={() => setShowAddColumn(true)}>
-        <Icon name="plus" size={14} />
-        Add another column
-      </button>
+      <MainDashboard
+        board={activeBoard}
+        priorityFilter={priorityFilter}
+        onAddCard={handleAddCard}
+        onEditCard={handleEditCard}
+        onDeleteCard={handleDeleteCard}
+        onMoveCard={handleMoveCard}
+        onAddColumnClick={() => setShowAddColumn(true)}
+        onEditColumn={handleEditColumn}
+        onDeleteColumn={handleDeleteColumn}
+      />
 
       {createCardColumnId && (
         <CreateCardModal
@@ -139,6 +136,15 @@ export default function ScreensPage() {
           column={editingColumn}
           onClose={() => setEditingColumn(null)}
           onSubmit={handleUpdateColumn}
+        />
+      )}
+
+      {showFilters && (
+        <FiltersModal
+          board={activeBoard}
+          priorityFilter={priorityFilter}
+          onPriorityFilterChange={setPriorityFilter}
+          onClose={() => setShowFilters(false)}
         />
       )}
     </div>

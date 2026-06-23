@@ -1,7 +1,7 @@
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 
   height: 68px;
   padding: 0 24px;
@@ -10,22 +10,6 @@
   border-bottom: 1px solid var(--color-border);
 
   flex-shrink: 0;
-}
-
-.left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.boardTitle {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--color-text);
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .right {
@@ -107,12 +91,7 @@
 @media (max-width: 767px) {
   .header {
     height: 60px;
-    /* sol taraf Sidebar'ın sabit konumlu mobil menü ikonuna (top/left: 14px, 22px boyut) yer açıyor */
-    padding: 0 16px 0 48px;
-  }
-
-  .boardTitle {
-    font-size: 16px;
+    padding: 0 16px;
   }
 
   .userName {

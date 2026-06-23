@@ -1,23 +1,17 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { useBoard } from "../../context/BoardContext";
 import { useTheme } from "../../context/ThemeContext";
 import styles from "./Header.module.css";
 import EditProfileModal from "../modals/EditProfileModal";
 
 export default function Header() {
   const { user } = useAuth();
-  const { activeBoard } = useBoard();
   const { theme, setTheme } = useTheme();
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   return (
     <header className={styles.header}>
-      <div className={styles.left}>
-        <h2 className={styles.boardTitle}>{activeBoard?.title ?? "TaskPro"}</h2>
-      </div>
-
       <div className={styles.right}>
         <div className={styles.themeSelector}>
           <span>Theme</span>
