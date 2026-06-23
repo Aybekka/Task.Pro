@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '../../context/AuthContext';
-import { registerSchema } from './authSchemas';
-import EyeIcon from './EyeIcon';
-import styles from './AuthPage.module.css';
+import { registerSchema } from '../../pages/AuthPage/authSchemas';
+import EyeIcon from '../EyeIcon/EyeIcon';
+import styles from '../../pages/AuthPage/AuthPage.module.css';
 import { useNavigate } from 'react-router-dom';
 
 export default function RegisterForm() {

@@ -7,7 +7,7 @@ import PublicRoute from './components/PublicRoute/PublicRoute';
 const WelcomePage = lazy(() => import('./pages/WelcomePage/WelcomePage'));
 const AuthPage = lazy(() => import('./pages/AuthPage/AuthPage'));
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
-const ScreensPage = lazy(() => import('./components/ScreensPage/ScreensPage'));
+const ScreensPage = lazy(() => import('./pages/ScreensPage/ScreensPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage/NotFoundPage'));
 
 const App = () => {

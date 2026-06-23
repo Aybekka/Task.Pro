@@ -1,8 +1,8 @@
 
 /* K2 Gizemnur */
 import { Link, Navigate, useParams } from 'react-router-dom';
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
+import LoginForm from '../../components/LoginForm/LoginForm';
+import RegisterForm from '../../components/RegisterForm/RegisterForm';
 import styles from './AuthPage.module.css';
 
 const AUTH_MODES = new Set(['login', 'register']);
@@ -17,7 +17,7 @@ export default function AuthPage() {
   const isLogin = mode === 'login';
 
   return (
-    <div className={styles.page}>
+    <main className={styles.page}>
       <div className={styles.card}>
         <div className={styles.header}>
           <p className={styles.kicker}></p>
@@ -39,6 +39,6 @@ export default function AuthPage() {
 
         {isLogin ? <LoginForm /> : <RegisterForm />}
       </div>
-    </div>
+    </main>
   );
 }

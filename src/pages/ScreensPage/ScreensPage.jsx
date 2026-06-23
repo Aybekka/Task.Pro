@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useBoard } from '../../context/BoardContext';
-import HeaderDashboard from '../HeaderDashboard/HeaderDashboard';
-import MainDashboard from '../MainDashboard/MainDashboard';
-import CreateCardModal from '../modals/CreateCardModal';
-import EditCardModal from '../modals/EditCardModal';
-import AddColumnModal from '../modals/AddColumnModal';
-import EditColumnModal from '../modals/EditColumnModal';
-import FiltersModal from '../modals/FiltersModal';
+import HeaderDashboard from '../../components/HeaderDashboard/HeaderDashboard';
+import MainDashboard from '../../components/MainDashboard/MainDashboard';
+import CreateCardModal from '../../components/modals/CreateCardModal';
+import EditCardModal from '../../components/modals/EditCardModal';
+import AddColumnModal from '../../components/modals/AddColumnModal';
+import EditColumnModal from '../../components/modals/EditColumnModal';
+import FiltersModal from '../../components/modals/FiltersModal';
 import styles from './ScreensPage.module.css';
 
 export default function ScreensPage() {

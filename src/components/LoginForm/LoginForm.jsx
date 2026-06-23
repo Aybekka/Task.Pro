@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '../../context/AuthContext';
-import { loginSchema } from './authSchemas';
-import EyeIcon from './EyeIcon';
-import styles from './AuthPage.module.css';
+import { loginSchema } from '../../pages/AuthPage/authSchemas';
+import EyeIcon from '../EyeIcon/EyeIcon';
+import styles from '../../pages/AuthPage/AuthPage.module.css';
 
 export default function LoginForm() {
   const { login, isLoading, error: authError } = useAuth();
@@ -54,7 +54,7 @@ export default function LoginForm() {
             id="login-password"
             {...field('password')}
             type={isPasswordVisible ? 'text' : 'password'}
-            placeholder="Confirm a password"
+            placeholder="Enter your password"
             aria-label="Password"
             className={`${styles.input} ${styles.passwordInput}`}
             autoComplete="current-password"
