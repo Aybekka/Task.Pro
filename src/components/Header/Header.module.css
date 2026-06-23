@@ -12,6 +12,12 @@
   flex-shrink: 0;
 }
 
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .boardTitle {
   font-size: 18px;
   font-weight: 600;
@@ -98,24 +104,6 @@
   font-weight: 600;
 }
 
-.hamburger {
-  display: none;
-
-  width: 32px;
-  height: 32px;
-
-  align-items: center;
-  justify-content: center;
-
-  color: var(--color-text);
-}
-
-.left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 @media (max-width: 767px) {
   .header {
     height: 60px;
@@ -132,9 +120,5 @@
 
   .right {
     gap: 12px;
-  }
-
-  .hamburger {
-    display: flex;
   }
 }
