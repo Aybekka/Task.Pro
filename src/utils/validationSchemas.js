@@ -5,7 +5,7 @@ export const nameRules = yup
   .string()
   .trim()
   .min(2, "Name must be at least 2 characters.")
-  .max(50, "Name must be at most 50 characters.")
+  .max(32, "Name must be at most 32 characters.")
   .required("Name is required.");
 
 export const emailRules = yup
@@ -17,6 +17,8 @@ export const emailRules = yup
 export const passwordRules = yup
   .string()
   .min(8, "Password must be at least 8 characters.")
+  .max(64, "Password must be at most 64 characters.")
+  .matches(/^\S+$/, "Password must not contain spaces.")
   .matches(/[A-Z]/, "Must contain at least one uppercase letter.")
   .matches(/[0-9]/, "Must contain at least one number.")
   .required("Password is required.");
@@ -32,10 +34,16 @@ export const editProfileSchema = yup.object({
     .transform((v) => (v === "" ? null : v))
     .test(
       "optional-strong",
-      "Min 8 chars, one uppercase, one number.",
+      "8-64 chars, no spaces, one uppercase, one number.",
       (val) => {
         if (!val) return true;
-        return val.length >= 8 && /[A-Z]/.test(val) && /[0-9]/.test(val);
+        return (
+          val.length >= 8 &&
+          val.length <= 64 &&
+          /^\S+$/.test(val) &&
+          /[A-Z]/.test(val) &&
+          /[0-9]/.test(val)
+        );
       },
     ),
   // Şifre boş bırakılmışsa onay alanının da boş olmasına izin veriyorum;
