@@ -107,7 +107,8 @@
 @media (max-width: 767px) {
   .header {
     height: 60px;
-    padding: 0 16px;
+    /* sol taraf Sidebar'ın sabit konumlu mobil menü ikonuna (top/left: 14px, 22px boyut) yer açıyor */
+    padding: 0 16px 0 48px;
   }
 
   .boardTitle {
