@@ -10,7 +10,7 @@
 }
 
 .modal {
-  background-color: var(--color-sidebar);
+  background-color: var(--color-card);
   border-radius: 16px;
   width: 100%;
   max-width: 480px;

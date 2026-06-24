@@ -10,7 +10,7 @@
 .card {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
-    var(--color-sidebar);
+    var(--color-card);
   border-radius: 24px;
   padding: 40px;
   width: 100%;
@@ -84,7 +84,7 @@
 }
 
 .tabActive {
-  background: var(--color-sidebar);
+  background: var(--color-card);
   color: var(--color-text);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
 }
