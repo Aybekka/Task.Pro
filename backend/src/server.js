@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
@@ -18,6 +19,8 @@ async function startServer() {
   // cors() express.json()'dan ÖNCE çalışmalı: body limiti aşılırsa hata cors hiç
   // işlemeden döner, CORS header'ı olmayan yanıtı tarayıcı JS'e göstermez ("Failed to fetch")
   app.use(cors({ origin: env('CLIENT_URL'), credentials: true }));
+  // CSP kapalı: bu salt JSON API + Swagger UI, CSP Swagger'ın inline script/style'larını kırar
+  app.use(helmet({ contentSecurityPolicy: false }));
   // avatarUrl base64 data-URL olarak gönderiliyor, varsayılan 100kb limiti yetersiz
   app.use(express.json({ limit: '3mb' }));
   app.use(cookieParser());

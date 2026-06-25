@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
+import { authLimiter } from '../middlewares/rateLimiter.js';
 import { registerSchema, loginSchema } from '../validation/auth.js';
 import {
   registerController,
@@ -32,7 +33,7 @@ const router = Router();
  *       201: { description: User registered, session created }
  *       409: { description: Email already in use }
  */
-router.post('/register', validateBody(registerSchema), ctrlWrapper(registerController));
+router.post('/register', authLimiter, validateBody(registerSchema), ctrlWrapper(registerController));
 
 /**
  * @swagger
@@ -54,7 +55,7 @@ router.post('/register', validateBody(registerSchema), ctrlWrapper(registerContr
  *       200: { description: Logged in, session created }
  *       401: { description: Invalid email or password }
  */
-router.post('/login', validateBody(loginSchema), ctrlWrapper(loginController));
+router.post('/login', authLimiter, validateBody(loginSchema), ctrlWrapper(loginController));
 
 /**
  * @swagger
