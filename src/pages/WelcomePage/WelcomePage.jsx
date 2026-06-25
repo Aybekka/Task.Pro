@@ -16,12 +16,7 @@ export default function WelcomePage() {
         />
         
         <div className={styles.logoWrapper}>
-          <div className={styles.logoIcon}>
-          
-            <svg className="icon icon-Vector-1">
-              <use href="/symbol-defs.svg#icon-Vector-1" xlinkHref="/symbol-defs.svg#icon-Vector-1"></use>
-            </svg>
-          </div>
+          <img src="/favicon.svg" width="40" height="40" alt="" aria-hidden="true" />
           <h1 className={styles.logo}>Task Pro</h1>
         </div>
         

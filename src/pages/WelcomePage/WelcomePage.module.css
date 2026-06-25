@@ -40,21 +40,6 @@
   margin-bottom: 24px;
 }
 
-.logoIcon {
-  background-color: var(--color-text);
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logoIcon :global(svg) {
-  width: 18px;
-  height: 18px;
-  fill: #ffffff;
-}
 
 .logo {
   font-size: 32px;
