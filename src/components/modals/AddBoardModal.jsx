@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
@@ -10,8 +11,9 @@ import styles from './FormModal.module.css';
 const AddBoardModal = ({ onClose }) => {
     const { createBoard } = useBoard();
     const navigate = useNavigate();
+    const [submitError, setSubmitError] = useState(null);
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm({
+    const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(boardSchema),
         defaultValues: { icon: 'icon-project', background: '' },
     });
@@ -20,9 +22,14 @@ const AddBoardModal = ({ onClose }) => {
     const selectedBg = watch('background');
 
     const onSubmit = async (data) => {
-        const board = await createBoard(data);
-        navigate(`/home/${board.id}`);
-        onClose();
+        setSubmitError(null);
+        try {
+            const board = await createBoard(data);
+            navigate(`/home/${board.id}`);
+            onClose();
+        } catch (err) {
+            setSubmitError(err.message || 'Failed to create board. Please try again.');
+        }
     };
 
     return (
@@ -89,9 +96,11 @@ const AddBoardModal = ({ onClose }) => {
                     </div>
                 </div>
 
-                <button type="submit" className={styles.submit}>
+                {submitError && <span className={styles.error}>{submitError}</span>}
+
+                <button type="submit" className={styles.submit} disabled={isSubmitting}>
                     <span className={styles.submitPlus}>+</span>
-                    Create
+                    {isSubmitting ? 'Creating...' : 'Create'}
                 </button>
             </form>
         </Modal>

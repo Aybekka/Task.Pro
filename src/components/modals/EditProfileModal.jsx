@@ -96,7 +96,7 @@ export default function EditProfileModal({ onClose }) {
               </div>
             )}
 
-            <label className={styles.uploadBtn}>
+            <label className={styles.uploadBtn} aria-label="Upload avatar image">
               +
               <input
                 type="file"

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useBoard } from '../../context/BoardContext';
@@ -8,8 +9,9 @@ import styles from './FormModal.module.css';
 
 const EditBoardModal = ({ board, onClose }) => {
     const { updateBoard } = useBoard();
+    const [submitError, setSubmitError] = useState(null);
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm({
+    const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(boardSchema),
         defaultValues: { title: board.title, icon: board.icon, background: board.background },
     });
@@ -18,8 +20,13 @@ const EditBoardModal = ({ board, onClose }) => {
     const selectedBg = watch('background');
 
     const onSubmit = async (data) => {
-        await updateBoard(board.id, data);
-        onClose();
+        setSubmitError(null);
+        try {
+            await updateBoard(board.id, data);
+            onClose();
+        } catch (err) {
+            setSubmitError(err.message || 'Failed to update board. Please try again.');
+        }
     };
 
     return (
@@ -74,7 +81,11 @@ const EditBoardModal = ({ board, onClose }) => {
                     </div>
                 </div>
 
-                <button type="submit" className={styles.submit}>Edit</button>
+                {submitError && <span className={styles.error}>{submitError}</span>}
+
+                <button type="submit" className={styles.submit} disabled={isSubmitting}>
+                    {isSubmitting ? 'Saving...' : 'Edit'}
+                </button>
             </form>
         </Modal>
     );

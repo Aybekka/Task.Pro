@@ -25,10 +25,11 @@ function formatDeadlineDisplay(dateString) {
 export default function CreateCardModal({ onClose, onSubmit }) {
   const [deadline, setDeadline] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   const today = new Date().toISOString().split('T')[0];
 
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+  const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(cardSchema),
     defaultValues: { title: '', description: '', priority: 'without', deadline: null },
   });
@@ -41,9 +42,14 @@ export default function CreateCardModal({ onClose, onSubmit }) {
     return () => document.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
-  const onValid = (data) => {
-    onSubmit({ ...data, deadline: deadline || null });
-    onClose();
+  const onValid = async (data) => {
+    setSubmitError(null);
+    try {
+      await onSubmit({ ...data, deadline: deadline || null });
+      onClose();
+    } catch (err) {
+      setSubmitError(err.message || 'Failed to add card. Please try again.');
+    }
   };
 
   return createPortal(
@@ -99,9 +105,11 @@ export default function CreateCardModal({ onClose, onSubmit }) {
             </button>
           </div>
 
-          <button type="submit" className={styles.submitBtn}>
+          {submitError && <span className={styles.error}>{submitError}</span>}
+
+          <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
             <span className={styles.submitPlus}>+</span>
-            Add
+            {isSubmitting ? 'Adding...' : 'Add'}
           </button>
         </form>
       </div>

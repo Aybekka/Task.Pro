@@ -1,4 +1,3 @@
-import styles from './Card.module.css';
 import popStyles from './MovePopover.module.css';
 
 export default function MovePopover({ columns, currentColumnId, onMove, onClose }) {

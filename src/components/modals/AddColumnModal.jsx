@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,7 +7,9 @@ import { columnSchema } from '../../utils/validationSchemas';
 import styles from './ColumnModal.module.css';
 
 export default function AddColumnModal({ onClose, onSubmit }) {
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const [submitError, setSubmitError] = useState(null);
+
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(columnSchema),
     defaultValues: { title: '' },
   });
@@ -18,9 +20,14 @@ export default function AddColumnModal({ onClose, onSubmit }) {
     return () => document.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
-  const onValid = (data) => {
-    onSubmit(data);
-    onClose();
+  const onValid = async (data) => {
+    setSubmitError(null);
+    try {
+      await onSubmit(data);
+      onClose();
+    } catch (err) {
+      setSubmitError(err.message || 'Failed to add column. Please try again.');
+    }
   };
 
   return createPortal(
@@ -43,9 +50,11 @@ export default function AddColumnModal({ onClose, onSubmit }) {
             {errors.title && <span className={styles.error}>{errors.title.message}</span>}
           </div>
 
-          <button type="submit" className={styles.submitBtn}>
+          {submitError && <span className={styles.error}>{submitError}</span>}
+
+          <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
             <span className={styles.submitPlus}>+</span>
-            Add
+            {isSubmitting ? 'Adding...' : 'Add'}
           </button>
         </form>
       </div>

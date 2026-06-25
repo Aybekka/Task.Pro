@@ -102,8 +102,13 @@
   transition: opacity 0.2s;
 }
 
-.submitBtn:hover {
+.submitBtn:hover:not(:disabled) {
   opacity: 0.85;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 [data-theme="violet"] .submitBtn {

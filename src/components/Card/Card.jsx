@@ -4,7 +4,7 @@ import MovePopover from './MovePopover';
 import { isDueToday, formatDeadline } from '../../utils/dateHelpers';
 import styles from './Card.module.css';
 
-export default function Card({ card, columnId, columns, boardId, onEdit, onDelete, onMove }) {
+export default function Card({ card, columnId, columns, onEdit, onDelete, onMove }) {
   const [showMove, setShowMove] = useState(false);
 
   const priorityColor = `var(--priority-${card.priority || 'without'})`;
