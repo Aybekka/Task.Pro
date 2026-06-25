@@ -6,6 +6,36 @@ import { editProfileSchema } from "../../utils/validationSchemas";
 import Modal from "./Modal";
 import styles from "./EditProfileModal.module.css";
 
+// Avatar en fazla 32-76px gösteriliyor, telefon fotoğraflarının orijinal
+// çözünürlüğüne hiç gerek yok — base64'e çevirmeden önce küçültüp JPEG'e
+// sıkıştırıyoruz ki backend'in boyut limitini aşmasın.
+const AVATAR_MAX_DIMENSION = 256;
+
+function resizeImageFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, AVATAR_MAX_DIMENSION / Math.max(img.width, img.height));
+        const width = Math.round(img.width * scale);
+        const height = Math.round(img.height * scale);
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+
+        resolve(canvas.toDataURL("image/jpeg", 0.85));
+      };
+      img.onerror = () => reject(new Error("Invalid image file."));
+      img.src = reader.result;
+    };
+    reader.onerror = () => reject(new Error("Could not read file."));
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function EditProfileModal({ onClose }) {
   const { user, updateProfile } = useAuth();
 
@@ -26,15 +56,16 @@ export default function EditProfileModal({ onClose }) {
     },
   });
 
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Blob URL'ler sadece bu sayfa oturumunda geçerli, sayfa yenilenince kırılıyordu.
-    // Base64 data URL ise düz bir string olduğu için localStorage'a yazılıp kalıcı kalabiliyor.
-    const reader = new FileReader();
-    reader.onload = () => setAvatarUrl(reader.result);
-    reader.readAsDataURL(file);
+    try {
+      const resized = await resizeImageFile(file);
+      setAvatarUrl(resized);
+    } catch {
+      setSubmitError("Could not process that image. Please try a different one.");
+    }
   };
 
   const onSubmit = async ({ name, email, password }) => {

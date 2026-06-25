@@ -52,7 +52,10 @@ async function request(path, { method = 'GET', body, skipAuthRetry = false } = {
   const payload = res.status === 204 ? null : await res.json().catch(() => null);
 
   if (!res.ok) {
-    throw new Error(payload?.message || `Request failed with status ${res.status}`);
+    // Joi validasyon hatalarında backend errors[] dizisinde alana özel mesaj döner;
+    // genel "Validation failed" yerine bunu göstermek teşhisi kolaylaştırıyor
+    const detail = payload?.errors?.[0];
+    throw new Error(detail || payload?.message || `Request failed with status ${res.status}`);
   }
 
   return payload?.data;
