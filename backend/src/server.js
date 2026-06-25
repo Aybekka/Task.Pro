@@ -15,8 +15,11 @@ async function startServer() {
 
   const app = express();
 
-  app.use(express.json());
+  // cors() express.json()'dan ÖNCE çalışmalı: body limiti aşılırsa hata cors hiç
+  // işlemeden döner, CORS header'ı olmayan yanıtı tarayıcı JS'e göstermez ("Failed to fetch")
   app.use(cors({ origin: env('CLIENT_URL'), credentials: true }));
+  // avatarUrl base64 data-URL olarak gönderiliyor, varsayılan 100kb limiti yetersiz
+  app.use(express.json({ limit: '3mb' }));
   app.use(cookieParser());
   app.use(morgan('dev'));
 
