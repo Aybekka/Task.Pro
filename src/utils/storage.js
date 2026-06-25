@@ -1,10 +1,7 @@
 // localStorage işlemlerini burada tek bir yerde topladım, hem JSON.parse/stringify tekrarını
 // önledim hem de bozuk/eski bir değer varsa try/catch ile uygulamayı çökertmeden null dönmesini sağladım
 export const KEYS = {
-  USER:   'taskpro_user',
-  USERS:  'taskpro_users',
-  BOARDS: 'taskpro_boards',
-  THEME:  'taskpro_theme',
+  THEME: 'taskpro_theme',
 };
 
 export const storage = {

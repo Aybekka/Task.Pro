@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { storage, KEYS } from '../api/mock/storage';
+import { storage, KEYS } from '../utils/storage';
 
 // İzin verilen temaları sabit bir listede tutuyorum, çünkü localStorage'dan okunan
 // değer elle bozulmuş/eski bir değer olabilir, geçersizse sessizce 'dark'a düşmesini istiyorum

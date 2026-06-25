@@ -1,9 +1,6 @@
 /**
- * Help API layer
- * Mock şu an aktif. Gerçek backend'e geçmek için bu
- * dosyadaki mock import'unu axios/fetch çağrısıyla değiştir.
- * Fonksiyon imzası aynı kalır.
+ * Help API layer — gerçek backend'e bağlanıyor.
  */
-import { mockSendHelpRequest } from './mock/help.mock';
+import { api } from './client';
 
-export const sendHelpRequest = mockSendHelpRequest;
+export const sendHelpRequest = (data) => api.post('/help', data);

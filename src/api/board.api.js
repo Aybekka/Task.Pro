@@ -1,35 +1,25 @@
 /**
- * Board API layer
- * Mock şu an aktif. Gerçek backend'e geçmek için bu
- * dosyadaki mock import'larını axios/fetch çağrılarıyla değiştir.
- * Fonksiyon imzaları aynı kalır.
+ * Board API layer — gerçek backend'e bağlanıyor.
+ * BoardContext'in çağırdığı fonksiyon imzaları mock dönemiyle birebir aynı.
  */
-import {
-  mockGetBoards,
-  mockCreateBoard,
-  mockUpdateBoard,
-  mockDeleteBoard,
-  mockAddColumn,
-  mockUpdateColumn,
-  mockDeleteColumn,
-  mockAddCard,
-  mockUpdateCard,
-  mockDeleteCard,
-  mockMoveCard,
-} from './mock/board.mock';
+import { api } from './client';
 
-// BoardContext bu fonksiyonları çağırıyor, mock'tan gerçek API'ye geçişte
-// BoardContext'e hiç dokunmamak için imzaları aynı tutuyorum
-export const getBoards    = mockGetBoards;
-export const createBoard  = mockCreateBoard;
-export const updateBoard  = mockUpdateBoard;
-export const deleteBoard  = mockDeleteBoard;
+export const getBoards = () => api.get('/boards');
+export const createBoard = (data) => api.post('/boards', data);
+export const updateBoard = (boardId, data) => api.patch(`/boards/${boardId}`, data);
+export const deleteBoard = (boardId) => api.delete(`/boards/${boardId}`);
 
-export const addColumn    = mockAddColumn;
-export const updateColumn = mockUpdateColumn;
-export const deleteColumn = mockDeleteColumn;
+export const addColumn = (boardId, data) => api.post(`/boards/${boardId}/columns`, data);
+export const updateColumn = (boardId, columnId, data) =>
+  api.patch(`/boards/${boardId}/columns/${columnId}`, data);
+export const deleteColumn = (boardId, columnId) =>
+  api.delete(`/boards/${boardId}/columns/${columnId}`);
 
-export const addCard      = mockAddCard;
-export const updateCard   = mockUpdateCard;
-export const deleteCard   = mockDeleteCard;
-export const moveCard     = mockMoveCard;
+export const addCard = (boardId, columnId, data) =>
+  api.post(`/boards/${boardId}/columns/${columnId}/cards`, data);
+export const updateCard = (boardId, columnId, cardId, data) =>
+  api.patch(`/boards/${boardId}/columns/${columnId}/cards/${cardId}`, data);
+export const deleteCard = (boardId, columnId, cardId) =>
+  api.delete(`/boards/${boardId}/columns/${columnId}/cards/${cardId}`);
+export const moveCard = (boardId, moveData) =>
+  api.patch(`/boards/${boardId}/move-card`, moveData);

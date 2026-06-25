@@ -1,21 +1,43 @@
 /**
- * Auth API layer
- * Mock şu an aktif. Gerçek backend'e geçmek için bu
- * dosyadaki mock import'larını axios/fetch çağrılarıyla değiştir.
- * Fonksiyon imzaları aynı kalır.
+ * Auth API layer — gerçek backend'e bağlanıyor.
+ * Fonksiyon imzaları AuthContext'in beklediğiyle aynı, mock dönemiyle birebir uyumlu.
  */
-import {
-  mockLogin,
-  mockRegister,
-  mockLogout,
-  mockUpdateProfile,
-  mockGetCurrentUser,
-} from './mock/auth.mock';
+import { api, setAccessToken, clearAccessToken } from './client';
 
-// Context'lerin (AuthContext) mock mu gerçek backend mi kullandığımızı bilmesine gerek yok,
-// burada sadece isim eşliyoruz; backend hazır olunca tek değişecek yer burası
-export const loginUser         = mockLogin;
-export const registerUser      = mockRegister;
-export const logoutUser        = mockLogout;
-export const updateUserProfile = mockUpdateProfile;
-export const getCurrentUser    = mockGetCurrentUser;
+export async function loginUser({ email, password }) {
+  const result = await api.post('/auth/login', { email, password });
+  setAccessToken(result.accessToken);
+  return result.user;
+}
+
+export async function registerUser({ name, email, password }) {
+  const result = await api.post('/auth/register', { name, email, password });
+  setAccessToken(result.accessToken);
+  return result.user;
+}
+
+export async function logoutUser() {
+  try {
+    await api.post('/auth/logout');
+  } finally {
+    clearAccessToken();
+  }
+}
+
+export async function updateUserProfile(data) {
+  return api.patch('/users/me', data);
+}
+
+// AuthContext sayfa her açıldığında bunu parametresiz çağırıp oturumun hâlâ
+// geçerli olup olmadığına bakıyor; bu yüzden burası asla throw etmemeli —
+// refreshToken cookie'si geçerliyse yeni bir accessToken alıp /users/me'den
+// kullanıcıyı döner, geçersizse (veya hiç cookie yoksa) sessizce null döner.
+export async function getCurrentUser() {
+  try {
+    const refreshed = await api.refreshAccessToken();
+    if (!refreshed) return null;
+    return await api.get('/users/me');
+  } catch {
+    return null;
+  }
+}
