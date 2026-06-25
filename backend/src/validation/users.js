@@ -10,5 +10,5 @@ export const updateMeSchema = Joi.object({
     .pattern(/^\S+$/, 'no spaces')
     .pattern(/[A-Z]/, 'uppercase letter')
     .pattern(/[0-9]/, 'digit'),
-  avatarUrl: Joi.string().max(MAX_AVATAR_LENGTH).allow(null),
+  avatarUrl: Joi.string().max(MAX_AVATAR_LENGTH).allow(null, ''),
 });
