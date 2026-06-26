@@ -14,14 +14,19 @@ export const emailRules = yup
   .email("Enter a valid email address.")
   .required("Email is required.");
 
+// Gereksinim: zorunlu, sadece Latin harfi+rakam+sembol (büyük/küçük harf serbest),
+// 8-64 karakter, boşluk yasak. Karakter seti zorlaması içermiyor (örn. büyük harf
+// veya rakam şart değil), sadece izin verilen karakterleri kısıtlıyor.
 export const passwordRules = yup
   .string()
+  .required("Password is required.")
   .min(8, "Password must be at least 8 characters.")
   .max(64, "Password must be at most 64 characters.")
   .matches(/^\S+$/, "Password must not contain spaces.")
-  .matches(/[A-Z]/, "Must contain at least one uppercase letter.")
-  .matches(/[0-9]/, "Must contain at least one number.")
-  .required("Password is required.");
+  .matches(
+    /^[\x21-\x7E]*$/,
+    "Password can only contain Latin letters, numbers, and symbols.",
+  );
 
 export const editProfileSchema = yup.object({
   name: nameRules,
@@ -34,15 +39,14 @@ export const editProfileSchema = yup.object({
     .transform((v) => (v === "" ? null : v))
     .test(
       "optional-strong",
-      "8-64 chars, no spaces, one uppercase, one number.",
+      "8-64 chars, no spaces, Latin letters/numbers/symbols only.",
       (val) => {
         if (!val) return true;
         return (
           val.length >= 8 &&
           val.length <= 64 &&
           /^\S+$/.test(val) &&
-          /[A-Z]/.test(val) &&
-          /[0-9]/.test(val)
+          /^[\x21-\x7E]*$/.test(val)
         );
       },
     ),

@@ -28,5 +28,5 @@ export const BOARD_BACKGROUNDS = [
   '/bg/bg8.svg',
 ];
 
-// Base64 data-URL olarak saklanan avatar için üst sınır (~1.5MB decoded görsel).
-export const MAX_AVATAR_LENGTH = 2_000_000;
+// Frontend'in src/context/ThemeContext.jsx dosyasıyla birebir aynı kalmalı.
+export const THEMES = ['dark', 'light', 'violet'];

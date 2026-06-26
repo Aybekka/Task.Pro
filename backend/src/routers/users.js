@@ -2,8 +2,13 @@ import { Router } from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { validateBody } from '../middlewares/validateBody.js';
+import { uploadAvatar } from '../middlewares/uploadAvatar.js';
 import { updateMeSchema } from '../validation/users.js';
-import { getMeController, updateMeController } from '../controllers/users.js';
+import {
+  getMeController,
+  updateMeController,
+  patchAvatarController,
+} from '../controllers/users.js';
 
 const router = Router();
 
@@ -38,10 +43,29 @@ router.get('/me', ctrlWrapper(getMeController));
  *               name: { type: string }
  *               email: { type: string }
  *               password: { type: string }
- *               avatarUrl: { type: string, nullable: true }
+ *               theme: { type: string, enum: [dark, light, violet] }
  *     responses:
  *       200: { description: Updated user }
  */
 router.patch('/me', validateBody(updateMeSchema), ctrlWrapper(updateMeController));
+
+/**
+ * @swagger
+ * /users/me/avatar:
+ *   patch:
+ *     summary: Upload and set the currently authenticated user's avatar
+ *     tags: [Users]
+ *     security: [{ bearerAuth: [] }]
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               avatar: { type: string, format: binary }
+ *     responses:
+ *       200: { description: Updated user }
+ */
+router.patch('/me/avatar', uploadAvatar, ctrlWrapper(patchAvatarController));
 
 export default router;

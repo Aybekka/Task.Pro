@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { THEMES } from '../../constants/index.js';
 
 const userSchema = new Schema(
   {
@@ -12,6 +13,7 @@ const userSchema = new Schema(
     },
     password: { type: String, required: true },
     avatarUrl: { type: String, default: null },
+    theme: { type: String, enum: THEMES, default: 'dark' },
   },
   { timestamps: true, versionKey: false },
 );

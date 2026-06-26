@@ -4,11 +4,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../context/AuthContext";
 import { editProfileSchema } from "../../utils/validationSchemas";
 import Modal from "./Modal";
+import EyeIcon from "../EyeIcon/EyeIcon";
 import styles from "./EditProfileModal.module.css";
 
 // Avatar en fazla 32-76px gösteriliyor, telefon fotoğraflarının orijinal
-// çözünürlüğüne hiç gerek yok — base64'e çevirmeden önce küçültüp JPEG'e
-// sıkıştırıyoruz ki backend'in boyut limitini aşmasın.
+// çözünürlüğüne hiç gerek yok — Cloudinary'ye yüklemeden önce küçültüp
+// JPEG'e sıkıştırıyoruz ki yükleme hızlı olsun.
 const AVATAR_MAX_DIMENSION = 256;
 
 function resizeImageFile(file) {
@@ -26,7 +27,11 @@ function resizeImageFile(file) {
         canvas.height = height;
         canvas.getContext("2d").drawImage(img, 0, 0, width, height);
 
-        resolve(canvas.toDataURL("image/jpeg", 0.85));
+        canvas.toBlob(
+          (blob) => (blob ? resolve(blob) : reject(new Error("Invalid image file."))),
+          "image/jpeg",
+          0.85,
+        );
       };
       img.onerror = () => reject(new Error("Invalid image file."));
       img.src = reader.result;
@@ -37,10 +42,13 @@ function resizeImageFile(file) {
 }
 
 export default function EditProfileModal({ onClose }) {
-  const { user, updateProfile } = useAuth();
+  const { user, updateProfile, updateAvatar } = useAuth();
 
   const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl ?? "");
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
 
   const {
     register,
@@ -60,11 +68,16 @@ export default function EditProfileModal({ onClose }) {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setSubmitError(null);
+    setIsUploadingAvatar(true);
     try {
       const resized = await resizeImageFile(file);
-      setAvatarUrl(resized);
-    } catch {
-      setSubmitError("Could not process that image. Please try a different one.");
+      const result = await updateAvatar(resized);
+      setAvatarUrl(result.avatarUrl);
+    } catch (err) {
+      setSubmitError(err.message || "Could not upload that image. Please try a different one.");
+    } finally {
+      setIsUploadingAvatar(false);
     }
   };
 
@@ -74,7 +87,6 @@ export default function EditProfileModal({ onClose }) {
       await updateProfile({
         name,
         email,
-        avatarUrl,
         ...(password ? { password } : {}),
       });
       onClose();
@@ -87,7 +99,7 @@ export default function EditProfileModal({ onClose }) {
     <Modal title="Edit profile" onClose={onClose}>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.avatarSection}>
-          <div className={styles.avatarWrapper}>
+          <div className={styles.avatarWrapper} style={{ opacity: isUploadingAvatar ? 0.6 : 1 }}>
             {avatarUrl ? (
               <img src={avatarUrl} alt="Avatar" className={styles.avatar} />
             ) : (
@@ -102,6 +114,7 @@ export default function EditProfileModal({ onClose }) {
                 type="file"
                 accept="image/*"
                 onChange={handleAvatarChange}
+                disabled={isUploadingAvatar}
                 hidden
               />
             </label>
@@ -129,24 +142,46 @@ export default function EditProfileModal({ onClose }) {
         </div>
 
         <div className={styles.field}>
-          <input
-            className={styles.input}
-            type="password"
-            placeholder="New password"
-            autoComplete="new-password"
-            {...register("password")}
-          />
+          <div className={styles.passwordField}>
+            <input
+              className={`${styles.input} ${styles.passwordInput}`}
+              type={isPasswordVisible ? "text" : "password"}
+              placeholder="New password"
+              autoComplete="new-password"
+              {...register("password")}
+            />
+            <button
+              type="button"
+              className={styles.visibilityBtn}
+              onClick={() => setIsPasswordVisible((value) => !value)}
+              aria-label={isPasswordVisible ? "Hide password" : "Show password"}
+              aria-pressed={isPasswordVisible}
+            >
+              <EyeIcon isVisible={isPasswordVisible} />
+            </button>
+          </div>
           {errors.password && <span className={styles.error}>{errors.password.message}</span>}
         </div>
 
         <div className={styles.field}>
-          <input
-            className={styles.input}
-            type="password"
-            placeholder="Confirm new password"
-            autoComplete="new-password"
-            {...register("confirmPassword")}
-          />
+          <div className={styles.passwordField}>
+            <input
+              className={`${styles.input} ${styles.passwordInput}`}
+              type={isConfirmPasswordVisible ? "text" : "password"}
+              placeholder="Confirm new password"
+              autoComplete="new-password"
+              {...register("confirmPassword")}
+            />
+            <button
+              type="button"
+              className={styles.visibilityBtn}
+              onClick={() => setIsConfirmPasswordVisible((value) => !value)}
+              aria-label={isConfirmPasswordVisible ? "Hide password" : "Show password"}
+              aria-pressed={isConfirmPasswordVisible}
+            >
+              <EyeIcon isVisible={isConfirmPasswordVisible} />
+            </button>
+          </div>
           {errors.confirmPassword && (
             <span className={styles.error}>{errors.confirmPassword.message}</span>
           )}

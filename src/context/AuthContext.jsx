@@ -4,6 +4,7 @@ import {
   registerUser,
   logoutUser,
   updateUserProfile,
+  uploadAvatar,
   getCurrentUser,
 } from '../api/auth.api';
 
@@ -78,9 +79,15 @@ export function AuthProvider({ children }) {
     return result;
   }, []);
 
+  const updateAvatar = useCallback(async file => {
+    const result = await uploadAvatar(file);
+    setUser(result);
+    return result;
+  }, []);
+
   return (
     <AuthContext.Provider
-      value={{ user, isLoggedIn, isLoading, isRefreshing, error, login, register, logout, updateProfile }}
+      value={{ user, isLoggedIn, isLoading, isRefreshing, error, login, register, logout, updateProfile, updateAvatar }}
     >
       {children}
     </AuthContext.Provider>

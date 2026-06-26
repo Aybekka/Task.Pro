@@ -3,7 +3,7 @@ import { emailRules, nameRules, passwordRules } from "../../utils/validationSche
 
 export const loginSchema = yup.object({
   email: emailRules,
-  password: yup.string().required("Password is required."),
+  password: passwordRules,
 });
 
 export const registerSchema = yup.object({

@@ -31,21 +31,24 @@ async function refreshAccessToken() {
   return refreshPromise;
 }
 
-async function request(path, { method = 'GET', body, skipAuthRetry = false } = {}) {
-  const headers = { 'Content-Type': 'application/json' };
+async function request(path, { method = 'GET', body, isFormData = false, skipAuthRetry = false } = {}) {
+  const headers = {};
+  if (!isFormData) headers['Content-Type'] = 'application/json';
   if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
 
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
     headers,
     credentials: 'include',
-    body: body !== undefined ? JSON.stringify(body) : undefined,
+    // FormData için Content-Type'ı tarayıcı boundary'siyle birlikte kendi set etmeli,
+    // o yüzden burada stringify etmeden olduğu gibi gönderiyoruz
+    body: isFormData ? body : body !== undefined ? JSON.stringify(body) : undefined,
   });
 
   if (res.status === 401 && !skipAuthRetry) {
     const refreshed = await refreshAccessToken();
     if (refreshed) {
-      return request(path, { method, body, skipAuthRetry: true });
+      return request(path, { method, body, isFormData, skipAuthRetry: true });
     }
   }
 
@@ -66,5 +69,6 @@ export const api = {
   post: (path, body) => request(path, { method: 'POST', body }),
   patch: (path, body) => request(path, { method: 'PATCH', body }),
   delete: (path) => request(path, { method: 'DELETE' }),
+  upload: (path, formData) => request(path, { method: 'PATCH', body: formData, isFormData: true }),
   refreshAccessToken,
 };

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { MAX_AVATAR_LENGTH } from '../constants/index.js';
+import { THEMES } from '../constants/index.js';
 
 export const updateMeSchema = Joi.object({
   name: Joi.string().min(2).max(32),
@@ -10,5 +10,5 @@ export const updateMeSchema = Joi.object({
     .pattern(/^\S+$/, 'no spaces')
     .pattern(/[A-Z]/, 'uppercase letter')
     .pattern(/[0-9]/, 'digit'),
-  avatarUrl: Joi.string().max(MAX_AVATAR_LENGTH).allow(null, ''),
+  theme: Joi.string().valid(...THEMES),
 });

@@ -28,6 +28,12 @@ export async function updateUserProfile(data) {
   return api.patch('/users/me', data);
 }
 
+export async function uploadAvatar(file) {
+  const formData = new FormData();
+  formData.append('avatar', file);
+  return api.upload('/users/me/avatar', formData);
+}
+
 // AuthContext sayfa her açıldığında bunu parametresiz çağırıp oturumun hâlâ
 // geçerli olup olmadığına bakıyor; bu yüzden burası asla throw etmemeli —
 // refreshToken cookie'si geçerliyse yeni bir accessToken alıp /users/me'den

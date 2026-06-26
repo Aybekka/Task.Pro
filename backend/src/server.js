@@ -21,8 +21,7 @@ async function startServer() {
   app.use(cors({ origin: env('CLIENT_URL'), credentials: true }));
   // CSP kapalı: bu salt JSON API + Swagger UI, CSP Swagger'ın inline script/style'larını kırar
   app.use(helmet({ contentSecurityPolicy: false }));
-  // avatarUrl base64 data-URL olarak gönderiliyor, varsayılan 100kb limiti yetersiz
-  app.use(express.json({ limit: '3mb' }));
+  app.use(express.json({ limit: '200kb' }));
   app.use(cookieParser());
   app.use(morgan('dev'));
 
